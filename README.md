@@ -46,7 +46,7 @@ After 2-4 rounds of deliberation, you receive:
 
 ## Example Output
 
-See `sessions/2026-01-pin5-nramp6-coexpression/REPORT.md` for a complete example investigating the mechanistic relationship between two plant transporters.
+Run your first investigation to generate example output in `sessions/`. Each round produces a brief (~55 lines) and a detail file — see [ARCHITECTURE.md](ARCHITECTURE.md) for the full output structure.
 
 ## How It Works
 
