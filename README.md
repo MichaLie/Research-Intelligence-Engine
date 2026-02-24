@@ -70,6 +70,44 @@ You → Research Question
 You ← Research Report
 ```
 
+## Pedagogical Approach
+
+This system is designed to **teach research judgment**, not just deliver literature summaries. The AI agents do the searching and structured analysis; the human practices the hardest skills in research — deciding what matters, when to push deeper, and when to stop.
+
+### Design Principles
+
+**1. The checkpoint is the curriculum.** After each round, the student faces a genuine decision: continue, dive deeper, converge, redirect, or stop. There is no "correct" answer. The system provides evidence and framing; the student exercises judgment. This is deliberate — research skill develops through repeated, reasoned decision-making under uncertainty, not through passive reading.
+
+**2. Make the thinking visible.** Every agent output is labeled with the framework being applied and *why* it matters. When the Critic runs a Steel-Manning analysis, the output explains what steel-manning is and why it strengthens rather than weakens your position. When the Deep Analyst navigates abstraction levels, the output explains how cross-level connections reveal hidden mechanisms. Students don't just see conclusions — they see the reasoning patterns that produced them.
+
+**3. Every option teaches something different.** Each checkpoint option includes a "Develops:" annotation explaining what skill that choice builds:
+- *Continue* develops tolerance for sitting with unresolved tension
+- *Deep dive* develops the skill of identifying which uncertainties matter most
+- *Converge* develops recognizing when further rounds won't change the picture
+- *Redirect* develops intellectual flexibility
+- *Stop* develops recognizing sunk cost
+
+These annotations make the pedagogical intent explicit. Students learn to choose *for reasons*, not by default.
+
+**4. Reflection before action.** Each checkpoint includes 3 targeted reflection prompts (selected from a menu of 5) that force a metacognitive pause: *Is the evidence strong enough? Have all hypotheses been tested fairly? Am I seeing genuine progress or just spinning?* The prompts rotate across rounds to prevent checklist fatigue.
+
+**5. Layered output respects cognitive load.** Each round produces two files: a brief (~55 lines) for decision-making and a detail file (~800-900 lines) for depth. The brief contains everything needed to decide. The detail file is where the deeper learning lives — students choose when they're ready for it. This prevents the "1000-line wall of text" problem where important insights get buried and students disengage.
+
+**6. Adversarial design teaches epistemic humility.** The Critic agent is not a rubber stamp. It steel-mans counter-arguments, audits assumption stacks, and blocks premature convergence. Students learn that having their conclusions challenged is a feature, not a failure — and that surviving rigorous challenge is what makes conclusions trustworthy.
+
+### What Students Practice
+
+| Skill | How the System Develops It |
+|-------|---------------------------|
+| Evidence evaluation | Quality ratings, evidence hierarchy, counter-evidence searches |
+| Hypothesis reasoning | Explicit support/refutation criteria, confidence calibration |
+| Decision under uncertainty | Checkpoint choices with incomplete information |
+| Metacognition | Reflection prompts, "state WHY" requirement |
+| Knowing when to stop | Convergence criteria, diminishing returns recognition |
+| Intellectual honesty | Adversarial review, steel-manning, assumption audits |
+
+---
+
 ## Limitations
 
 Be aware of what this system **cannot** do:
