@@ -89,7 +89,12 @@ def search_biorxiv(
 
     # Split query into words for multi-word matching
     # All words must appear (AND logic), case-insensitive
-    query_words = [w.lower() for w in re.findall(r'\w+', query) if len(w) > 2]
+    # len > 1 so 2-char terms like "AI" work; single chars are noise
+    query_words = [w.lower() for w in re.findall(r'\w+', query) if len(w) > 1]
+
+    if not query_words:
+        print("[NO RESULTS] Query too short after filtering — all words must be 2+ characters.", file=sys.stderr)
+        return []
 
     while len(papers) < max_results:
         paginated_url = f"{BIORXIV_BASE_URL}/details/{server}/{date_from}/{date_to}/{cursor}/json"
@@ -136,7 +141,7 @@ def search_biorxiv(
                     break
 
         except Exception as e:
-            print(f"Error searching {server}: {e}")
+            print(f"[ERROR] Failed searching {server}: {e}", file=sys.stderr)
             break
 
     return papers[:max_results]
@@ -208,7 +213,7 @@ def get_paper_details(doi: str) -> Optional[dict]:
                     "published_doi": item.get("published", "")  # If published in journal
                 }
     except Exception as e:
-        print(f"Error fetching paper details: {e}")
+        print(f"[ERROR] Failed fetching paper details: {e}", file=sys.stderr)
 
     return None
 
@@ -279,7 +284,7 @@ if __name__ == "__main__":
     papers = search_both_servers(query, max_results=5)
 
     if not papers:
-        print("No results found.")
+        print(f"No results found for: \"{query}\"")
     else:
         for i, paper in enumerate(papers, 1):
             print(f"{i}. [{paper.get('server', 'bioRxiv')}] {paper['title']}")

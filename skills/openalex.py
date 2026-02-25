@@ -71,7 +71,7 @@ def _make_request(url: str) -> Optional[dict]:
         with urllib.request.urlopen(request, timeout=30, context=_SSL_CONTEXT) as response:
             return json.loads(response.read().decode())
     except Exception as e:
-        print(f"Error making OpenAlex request: {e}")
+        print(f"[ERROR] Failed making OpenAlex request: {e}", file=sys.stderr)
         return None
 
 
@@ -353,7 +353,7 @@ if __name__ == "__main__":
     works = search_works(query, max_results=5)
 
     if not works:
-        print("No results found.")
+        print(f"No results found for: \"{query}\"")
     else:
         for i, work in enumerate(works, 1):
             print(f"{i}. {work['title']}")

@@ -125,7 +125,7 @@ def search_pubmed(
             data = json.loads(response.read().decode())
             return data.get("esearchresult", {}).get("idlist", [])
     except Exception as e:
-        print(f"Error searching PubMed: {e}")
+        print(f"[ERROR] Failed searching PubMed: {e}", file=sys.stderr)
         return []
 
 
@@ -172,7 +172,7 @@ def fetch_details(pmids: list[str]) -> list[dict]:
             xml_data = response.read().decode()
             return _parse_pubmed_xml(xml_data)
     except Exception as e:
-        print(f"Error fetching PubMed details: {e}")
+        print(f"[ERROR] Failed fetching PubMed details: {e}", file=sys.stderr)
         return []
 
 
@@ -235,7 +235,7 @@ def _parse_pubmed_xml(xml_data: str) -> list[dict]:
             articles.append(article_data)
 
     except ET.ParseError as e:
-        print(f"Error parsing PubMed XML: {e}")
+        print(f"[ERROR] Failed parsing PubMed XML: {e}", file=sys.stderr)
 
     return articles
 
@@ -298,6 +298,10 @@ if __name__ == "__main__":
     print(f"Searching PubMed for: {query}\n")
 
     articles = search_and_fetch(query, max_results=5)
+
+    if not articles:
+        print(f"No results found for: \"{query}\"")
+        sys.exit(0)
 
     for i, article in enumerate(articles, 1):
         print(f"{i}. {article['title']}")
