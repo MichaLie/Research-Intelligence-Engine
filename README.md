@@ -1,6 +1,6 @@
 # Research Intelligence Engine
 
-A multi-agent AI system for rigorous scientific literature review and hypothesis evaluation.
+A multi-agent AI system that teaches research judgment. AI agents search, analyze, and challenge — you decide what matters, when to push deeper, and when to stop. Every checkpoint is a deliberate exercise in scientific reasoning under uncertainty.
 
 > **This is a proof-of-concept designed to run inside Claude Code.** There is no Python orchestrator — Claude Code reads [ENGINE.md](ENGINE.md) and acts as the orchestrator directly. The "code" is prompt architecture: agent definitions, templates, and operating instructions that an LLM follows. This is deliberate. We're testing whether well-structured natural language instructions can reliably drive a multi-agent research loop. For known production gaps (TLS, retry logic, pagination, tests), see [TECH_DEBT.md](TECH_DEBT.md).
 

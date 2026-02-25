@@ -192,6 +192,9 @@ AGENT_DEFINITIONS = {
 }
 
 # Default model for agents
+# "opus" = Opus 4.6 (highest quality, recommended for research tasks)
+# "sonnet" = Sonnet 4.6 (faster, lower cost — viable for routine rounds
+#            where depth matters less, e.g. Researcher follow-up searches)
 DEFAULT_AGENT_MODEL = "opus"
 
 # =============================================================================

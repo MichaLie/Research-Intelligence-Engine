@@ -1,6 +1,6 @@
 # Research Intelligence Engine
 
-A deliberative multi-agent research system that runs natively in Claude Code. Claude acts as the Orchestrator, spawning Opus 4.5 subagents via the Task tool. All state persists in your project folder.
+A deliberative multi-agent research system that runs natively in Claude Code. Claude acts as the Orchestrator, spawning Opus 4.6 subagents via the Task tool. All state persists in your project folder.
 
 ---
 
@@ -26,8 +26,8 @@ A deliberative multi-agent research system that runs natively in Claude Code. Cl
         │                     │          │
 ┌───────┴───────┐      ┌──────┴─────┐   ┌┴────────────┐
 │     DEEP      │      │   CRITIC   │   │  RESEARCHER │
-│    ANALYST    │      │ (Opus 4.5) │   │  (Opus 4.5) │
-│   (Opus 4.5)  │      │            │   │             │
+│    ANALYST    │      │ (Opus 4.6) │   │  (Opus 4.6) │
+│   (Opus 4.6)  │      │            │   │             │
 │               │      │ -Adversary │   │ - PubMed    │
 │ - Perspective │      │ -Steel-man │   │ - bioRxiv   │
 │   framework   │      │ -Find gaps │   │ - OpenAlex  │
@@ -39,7 +39,7 @@ A deliberative multi-agent research system that runs natively in Claude Code. Cl
                               │
                     ┌─────────┴─────────┐
                     │    SYNTHESIZER    │
-                    │    (Opus 4.5)     │
+                    │    (Opus 4.6)     │
                     │                   │
                     │ - Distill round   │
                     │ - Map tensions    │
@@ -48,7 +48,7 @@ A deliberative multi-agent research system that runs natively in Claude Code. Cl
                               │
                     ┌─────────┴─────────┐
                     │ REPORT GENERATOR  │
-                    │    (Opus 4.5)     │
+                    │    (Opus 4.6)     │
                     │                   │
                     │ - Compile report  │
                     │ - Format findings │
@@ -181,7 +181,9 @@ This ensures:
 
 When spawning agents, use the Task tool with:
 - `subagent_type`: "general-purpose"
-- `model`: "opus" (ensures Opus 4.5)
+- `model`: "opus" (Opus 4.6 — default, highest quality)
+
+> **Cost-conscious alternative:** Set `model` to "sonnet" (Sonnet 4.6) for faster, cheaper rounds. Sonnet is viable for all agents but may produce less nuanced analysis from the Deep Analyst and less rigorous challenges from the Critic. Recommended approach: use Opus for Critic and Deep Analyst (where reasoning depth matters most), Sonnet for Researcher and Synthesizer (where the task is more structured). Configure per-agent in `config.py` via `DEFAULT_AGENT_MODEL`.
 
 Each agent should:
 1. Read their role definition from `agents/[agent].md`

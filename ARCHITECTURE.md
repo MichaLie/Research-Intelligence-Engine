@@ -16,7 +16,7 @@ How the Research Intelligence Engine produces and presents results.
 ┌───────┴───────┐      ┌─────┴──────┐   ┌┴────────────┐
 │     DEEP      │      │   CRITIC   │   │  RESEARCHER │
 │    ANALYST    │      │            │   │             │
-│   (Opus 4.5)  │      │ ~150-250   │   │ ~300-450    │
+│   (Opus 4.6)  │      │ ~150-250   │   │ ~300-450    │
 │               │      │   lines    │   │   lines     │
 │ ~150-250      │      │            │   │             │
 │   lines       │      │ -Adversary │   │ - PubMed    │
@@ -42,7 +42,7 @@ How the Research Intelligence Engine produces and presents results.
                              ▼
                    ┌─────────────────────┐
                    │    SYNTHESIZER      │
-                   │    (Opus 4.5)       │
+                   │    (Opus 4.6)       │
                    │                     │
                    │  Writes TWO outputs │
                    └──┬──────────────┬───┘
@@ -74,7 +74,7 @@ How the Research Intelligence Engine produces and presents results.
             ▼
     ┌───────────────┐        ┌─────────────────┐
     │  ORCHESTRATOR │───────►│ REPORT GENERATOR │
-    │               │  (on   │   (Opus 4.5)     │
+    │               │  (on   │   (Opus 4.6)     │
     │  Routes to    │  conv- │                   │
     │  next round   │  erge) │  Produces         │
     │  or converge  │        │  REPORT.md        │
