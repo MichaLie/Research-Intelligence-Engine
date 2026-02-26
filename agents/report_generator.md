@@ -192,7 +192,7 @@ This report was generated using the **Research Intelligence Engine**, a multi-ag
 
 ### Agents Employed
 - **Deep Analyst**: Multi-perspective analysis, hypothesis generation, abstraction navigation
-- **Researcher**: Systematic literature search (PubMed, OpenAlex, bioRxiv), evidence evaluation
+- **Researcher**: Systematic literature search (domain-specific databases), evidence evaluation
 - **Critic**: Adversarial challenge, steel-manning, assumption auditing, convergence assessment
 - **Synthesizer**: Round summaries, checkpoint generation
 - **Report Generator**: Final report synthesis
@@ -225,11 +225,7 @@ Full deliberation traces are available in the supporting materials:
 
 ## Appendix: Evidence Quality Rubric
 
-| Rating | Criteria |
-|--------|----------|
-| **High** | Peer-reviewed, RCT or systematic review, n>100, replicated |
-| **Medium** | Peer-reviewed, observational or small RCT, some limitations |
-| **Low** | Preprint, case report, expert opinion, major limitations |
+[Insert the quality rubric from the session's domain profile (`domains/{domain}.md`)]
 ```
 
 ---

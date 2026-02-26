@@ -73,6 +73,7 @@ JOURNAL_TEMPLATE = """# Research Session: {topic}
 **Session ID:** {session_id}
 **Started:** {timestamp}
 **Status:** active
+**Domain:** {domain}
 **Current Round:** 0
 
 ---
@@ -175,11 +176,7 @@ EVIDENCE_TEMPLATE = """# Evidence Collected
 
 ## Quality Legend
 
-| Rating | Criteria |
-|--------|----------|
-| **High** | Peer-reviewed, RCT or systematic review, n>100, replicated |
-| **Medium** | Peer-reviewed, observational or small RCT, some limitations |
-| **Low** | Preprint, case report, expert opinion, major limitations |
+{quality_rubric}
 
 ---
 
@@ -231,3 +228,28 @@ CONVERGENCE_INDICATORS = [
     "ready to converge",
     "analysis is robust"
 ]
+
+# =============================================================================
+# DOMAIN SETTINGS
+# =============================================================================
+
+# Available domain profiles (relative to project root)
+DOMAIN_PROFILES = {
+    "biomedical": "domains/biomedical.md",
+    "computer_science": "domains/computer_science.md",
+    "physics_math": "domains/physics_math.md",
+    "social_sciences": "domains/social_sciences.md",
+    "general": "domains/general.md",
+}
+
+# Default domain (used if detection is ambiguous)
+DEFAULT_DOMAIN = "general"
+
+# Domain-specific default sources for search_all.py
+DOMAIN_DEFAULT_SOURCES = {
+    "biomedical": ["pubmed", "openalex", "semantic_scholar", "biorxiv"],
+    "computer_science": ["semantic_scholar", "arxiv", "openalex", "dblp"],
+    "physics_math": ["arxiv", "semantic_scholar", "openalex"],
+    "social_sciences": ["openalex", "semantic_scholar", "crossref"],
+    "general": ["openalex", "semantic_scholar", "crossref"],
+}
