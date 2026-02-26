@@ -18,6 +18,18 @@ BIORXIV_BASE_URL = "https://api.biorxiv.org"
 # OpenAlex API
 OPENALEX_BASE_URL = "https://api.openalex.org"
 
+# Semantic Scholar API
+SEMANTIC_SCHOLAR_BASE_URL = "https://api.semanticscholar.org/graph/v1"
+
+# arXiv API
+ARXIV_BASE_URL = "https://export.arxiv.org/api/query"
+
+# Crossref API
+CROSSREF_BASE_URL = "https://api.crossref.org"
+
+# DBLP API
+DBLP_BASE_URL = "https://dblp.org/search/publ/api"
+
 # =============================================================================
 # API KEYS (Optional)
 # =============================================================================
@@ -29,6 +41,14 @@ PUBMED_API_KEY = None  # Set to your API key string if you have one
 # OpenAlex email (optional, for polite pool - better rate limits)
 # Setting this is recommended: https://docs.openalex.org/how-to-use-the-api/rate-limits-and-authentication
 OPENALEX_EMAIL = None  # Set to your email string, e.g., "researcher@university.edu"
+
+# Semantic Scholar API key (optional, increases rate limits significantly)
+# Get one at: https://www.semanticscholar.org/product/api
+SEMANTIC_SCHOLAR_API_KEY = None
+
+# Crossref email (optional, for polite pool - better rate limits)
+# Similar to OpenAlex, include email for higher rate limits
+CROSSREF_EMAIL = None
 
 # =============================================================================
 # DEFAULT SETTINGS
