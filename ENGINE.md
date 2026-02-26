@@ -28,9 +28,9 @@ A deliberative multi-agent research system that runs natively in Claude Code. Cl
 │     DEEP      │      │   CRITIC   │   │  RESEARCHER │
 │    ANALYST    │      │ (Opus 4.6) │   │  (Opus 4.6) │
 │   (Opus 4.6)  │      │            │   │             │
-│               │      │ -Adversary │   │ - PubMed    │
-│ - Perspective │      │ -Steel-man │   │ - bioRxiv   │
-│   framework   │      │ -Find gaps │   │ - OpenAlex  │
+│               │      │ -Adversary │   │ - Databases │
+│ - Perspective │      │ -Steel-man │   │   per domain│
+│   framework   │      │ -Find gaps │   │   profile   │
 │ - Scientific  │      │ -Challenge │   │ - Web search│
 │   inquiry     │      │            │   │             │
 └───────────────┘      └────────────┘   └─────────────┘
@@ -116,10 +116,26 @@ The slug should be lowercase, hyphen-separated, and descriptive.
    - Log the research question
 
 2. PHASE 1: STRUCTURING (Round 1)
+
+   STEP 0 — DOMAIN DETECTION (Orchestrator performs BEFORE spawning agents)
+
+   Classify the research question into one of:
+   - `biomedical` — Medicine, biology, pharmacology, neuroscience, public health, genetics, biochemistry
+   - `computer_science` — Machine learning, AI, algorithms, software engineering, HCI, NLP, computer vision, information retrieval, databases
+   - `physics_math` — Physics, mathematics, astronomy, statistics, applied math
+   - `social_sciences` — Psychology, sociology, economics, political science, education, anthropology
+   - `general` — Interdisciplinary, unclear, or spanning multiple domains
+
+   After classifying:
+   a) Read `domains/{domain_id}.md` to load the domain profile
+   b) Record the domain in `journal.md` as: `**Domain:** {domain_id}`
+   c) Pass the domain profile content to ALL agent spawns for this session
+      (include it after the agent's role definition, before session state)
+
    - Spawn Deep Analyst → reframe problem, initial perspective rotation
      - REQUIRED: Deep Analyst MUST produce a structured Hypothesis Table
        with Support Criteria AND Refutation Criteria columns
-   - Spawn Researcher → initial literature search (PubMed, OpenAlex, bioRxiv)
+   - Spawn Researcher → initial literature search (databases per domain profile)
    - Update journal.md
      - Orchestrator copies Deep Analyst's Hypothesis Table into journal.md
        BEFORE spawning Synthesizer (ensures hypotheses are tracked from Round 1)

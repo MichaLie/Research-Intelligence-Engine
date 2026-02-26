@@ -54,68 +54,28 @@ python3 skills/search_all.py "your search query" --sources all --max-results 10
 
 ### Database Priority Order
 
-1. **PubMed** (REQUIRED for biomedical topics):
-   - Use for: Clinical studies, reviews, mechanisms
-   - Execute: `python3 skills/pubmed.py "query"`
-   - Returns: PMIDs, titles, authors, abstracts, DOIs, publication types
+**Consult your domain profile** (`domains/{domain}.md`, provided in your context) for which databases are REQUIRED, RECOMMENDED, or supplementary for this session's research domain.
 
-2. **OpenAlex** (REQUIRED for citation analysis):
-   - Use for: Cross-disciplinary work, highly-cited papers, open access
-   - Execute: `python3 skills/openalex.py "query"`
-   - Returns: Citation counts, author info, open access status
+The following databases are available:
 
-3. **Semantic Scholar** (RECOMMENDED for CS and cross-disciplinary):
-   - Use for: Broad academic search with citation counts, author metadata
-   - Execute: `python3 skills/semantic_scholar.py "query"`
-   - Returns: Citation counts, DOI, arXiv ID, venue
-
-4. **arXiv** (REQUIRED for CS/physics/math preprints):
-   - Use for: Computer science, physics, math, quantitative biology preprints
-   - Execute: `python3 skills/arxiv.py "query"`
-   - Returns: arXiv ID, categories, PDF link, ar5iv HTML link
-   - Note: 3-second rate limit between requests
-
-5. **bioRxiv/medRxiv** (REQUIRED for biology/medicine preprints):
-   - Use for: Latest biology/medicine findings not yet peer-reviewed
-   - Execute: `python3 skills/biorxiv.py "query"`
-   - Returns: Preprint DOIs, abstracts, posting dates
-
-6. **Crossref** (supplementary - broad DOI coverage):
-   - Use for: DOI-registered works, journal articles, broad coverage
-   - Execute: `python3 skills/crossref.py "query"`
-   - Returns: DOIs, citation counts, journal metadata
-
-7. **DBLP** (supplementary - CS venues):
-   - Use for: Computer science conferences and journals specifically
-   - Execute: `python3 skills/dblp.py "query"`
-   - Note: Does NOT provide abstracts. Use for discovery, then look up details in other databases.
-
-8. **Unified search** (convenience - multi-source with deduplication):
-   - Use for: Quick comprehensive search across multiple databases at once
-   - Execute: `python3 skills/search_all.py "query"`
-   - Automatically deduplicates across sources and ranks by relevance
-
-9. **Web Search** (supplementary only):
-   - Use AFTER database searches, for: News, policy documents, expert commentary, grey literature
-   - Tool: WebSearch
-   - Do NOT rely on WebSearch for primary literature
-
-### Source Selection Strategy
-
-Choose databases based on the research domain:
-
-- **Biomedical research**: PubMed + OpenAlex + bioRxiv + Semantic Scholar
-- **Computer science**: Semantic Scholar + arXiv + DBLP + OpenAlex
-- **Physics/Mathematics**: arXiv + Semantic Scholar + OpenAlex
-- **Broad/interdisciplinary**: Unified search (`search_all.py --sources all`)
-- **Quick comprehensive**: `python3 skills/search_all.py "query" --sources all`
+| # | Database | Command | Notes |
+|---|----------|---------|-------|
+| 1 | PubMed | `python3 skills/pubmed.py "query"` | Biomedical literature, MeSH-indexed |
+| 2 | OpenAlex | `python3 skills/openalex.py "query"` | Broad academic, citation counts, open access |
+| 3 | Semantic Scholar | `python3 skills/semantic_scholar.py "query"` | Broad academic, strong CS coverage |
+| 4 | arXiv | `python3 skills/arxiv.py "query"` | Preprints: CS, physics, math, biology |
+| 5 | bioRxiv/medRxiv | `python3 skills/biorxiv.py "query"` | Biology/medicine preprints |
+| 6 | Crossref | `python3 skills/crossref.py "query"` | DOI-registered works, journal metadata |
+| 7 | DBLP | `python3 skills/dblp.py "query"` | CS conferences/journals (no abstracts) |
+| 8 | Unified search | `python3 skills/search_all.py "query" --domain {domain}` | Multi-source with deduplication |
+| 9 | Web Search | WebSearch tool | Supplementary only: grey literature, news |
 
 ### Search Process
 
 1. **Develop search terms**:
    - Key concepts from the research question
    - Synonyms and related terms
-   - MeSH terms (for PubMed)
+   - Domain-specific vocabulary (see "Query Building Notes" in your domain profile)
 
 2. **Execute searches**:
    - Start broad, then narrow
@@ -138,16 +98,9 @@ Choose databases based on the research domain:
 
 ## Source Evaluation Framework
 
-### Evidence Hierarchy (for interventions)
+### Evidence Hierarchy
 
-| Level | Source Type | Weight |
-|-------|------------|--------|
-| 1 | Systematic reviews/meta-analyses | Highest |
-| 2 | Randomized controlled trials | High |
-| 3 | Cohort studies | Moderate |
-| 4 | Case-control studies | Moderate-Low |
-| 5 | Case series/reports | Low |
-| 6 | Expert opinion | Lowest |
+**Use the evidence hierarchy from your domain profile.** The domain profile specifies what types of evidence carry the most weight in this research field.
 
 ### Quality Assessment Checklist
 
@@ -169,19 +122,12 @@ For each significant source:
 
 ### Quality Rating Rubric (REQUIRED)
 
-Use this rubric consistently for ALL sources:
+**Use the quality rubric from your domain profile.** Apply it consistently to ALL sources.
 
-| Rating | Criteria | Examples |
-|--------|----------|----------|
-| **High** | Peer-reviewed + (RCT or SR/MA) + n>100 + replicated OR seminal work in top journal | Cochrane reviews, large RCTs in NEJM/Lancet/Nature |
-| **Medium** | Peer-reviewed + (observational or small RCT or narrative review) + adequate methods + some limitations | Cohort studies, pilot RCTs, well-conducted observational |
-| **Low** | Preprint OR case report OR expert opinion OR major methodological limitations OR unreplicated | bioRxiv preprints, case series, opinion pieces, conference abstracts |
-
-**Borderline cases:**
+**General borderline rules (all domains):**
 - High-quality preprint from reputable group → Medium (note preprint status)
-- Small but well-designed RCT (n<50) → Medium
 - Old but seminal study → High (if still foundational)
-- Industry-funded with COI → Downgrade one level
+- Conflicts of interest → Downgrade one level
 
 ---
 
@@ -193,19 +139,21 @@ Use this rubric consistently for ALL sources:
 
 For each main hypothesis (H1, H2, etc.), run at least one search specifically for disconfirming evidence:
 
+Use the "Counter-Evidence Search Examples" from your domain profile for domain-appropriate search patterns. General pattern:
+
 ```bash
 # Example: If hypothesis is "X improves Y"
-python3 skills/pubmed.py "X Y (fail OR failure OR negative OR no effect OR ineffective)"
-python3 skills/pubmed.py "X Y (criticism OR critique OR limitations OR concerns)"
+python3 skills/search_all.py "X Y (fail OR failure OR negative OR no effect)" --domain {domain}
+python3 skills/search_all.py "X Y (criticism OR critique OR limitations OR concerns)" --domain {domain}
 ```
 
 ### What to Search For
 
 1. **Failed replications**: Studies that tried to replicate key findings and failed
-2. **Negative trials**: RCTs showing no effect
+2. **Negative results**: Studies showing no effect or contrary results
 3. **Critical reviews**: Papers critiquing the methodology or interpretation
-4. **Alternative explanations**: Papers proposing different mechanisms
-5. **Adverse effects**: Safety concerns, unintended consequences
+4. **Alternative explanations**: Papers proposing different mechanisms or approaches
+5. **Known limitations**: Documented weaknesses of the approach
 
 ### Documenting Counter-Evidence
 
@@ -224,39 +172,25 @@ If you find NO counter-evidence, document what searches you ran. Absence of coun
 
 ## Search Query Construction
 
-### PubMed Query Building
+Consult the "Query Building Notes" section in your domain profile for domain-specific guidance (e.g., MeSH terms for PubMed, arXiv categories for physics, conference acronyms for CS).
+
+### General Query Tips (all domains)
 
 ```
-Basic structure:
-(concept1[Title/Abstract] OR synonym1[Title/Abstract])
-AND
-(concept2[Title/Abstract] OR synonym2[Title/Abstract])
-AND
-(outcome[Title/Abstract])
-
-Filters to consider:
-- Publication date: ("2020"[Date - Publication] : "3000"[Date - Publication])
-- Study type: "randomized controlled trial"[Publication Type]
-- Review: "review"[Publication Type]
-- Human: "humans"[MeSH Terms]
+- Start broad, then narrow based on results
+- Use Boolean operators (AND, OR, NOT)
+- Apply date filters when searching for recent work
+- Use quotation marks for exact phrases
+- Search by author name for key research groups
 ```
 
-### OpenAlex Query Building
+### Database-Specific Notes
 
-```
-Use concepts, keywords, and filters:
-- search: free text search
-- filter: by year, type, open_access, cited_by_count
-- sort: by relevance, cited_by_count, publication_date
-```
-
-### bioRxiv Query Building
-
-```
-- subject_collection: Specific subject areas
-- date_range: Posted date filtering
-- Keywords in title/abstract
-```
+- **PubMed**: Supports MeSH terms, publication type filters (e.g., "review", "clinical trial"), species filters
+- **arXiv**: Supports category filtering (e.g., cs.LG, hep-th, math.AG). 3-second rate limit.
+- **DBLP**: Best searched with simplified queries (2-3 key terms). No abstracts — use for discovery.
+- **OpenAlex**: Supports concept/keyword search, filtering by year, type, open_access, cited_by_count
+- **Semantic Scholar**: Supports field-of-study filtering, venue filtering
 
 ---
 
@@ -301,7 +235,7 @@ Use concepts, keywords, and filters:
 - **Relevance**: [How it addresses the question]
 
 **Evidence Hierarchy (for assigning quality ratings):**
-`SR/MA (Highest) > RCT > Cohort > Case-Control > Case Series > Expert Opinion (Lowest)`
+Use the evidence hierarchy and quality rubric from the domain profile.
 
 **Evidence Summary:**
 | Finding | Support Level | Key Sources |
@@ -377,67 +311,34 @@ Update the Sources table in `evidence.md`:
 
 ## Search Tips by Question Type
 
-### Mechanism Questions
-- Focus on: Basic science literature, pathway databases
-- Useful terms: mechanism, pathway, molecular, signaling, regulation
-
-### Intervention Questions
-- Focus on: Clinical trials, systematic reviews
-- Useful terms: treatment, therapy, intervention, trial, randomized
-
-### Epidemiology Questions
-- Focus on: Cohort studies, population studies
-- Useful terms: prevalence, incidence, risk factor, association, cohort
-
-### Prognosis Questions
-- Focus on: Longitudinal studies, survival analyses
-- Useful terms: outcome, prognosis, survival, follow-up, natural history
+Consult the "Question Types" section in your domain profile for domain-specific question categories, search strategies, and recommended databases per question type.
 
 ---
 
 ## Example Search Session
 
-**Research Question**: Effects of intermittent fasting on longevity
+The databases and order depend on the domain profile. General pattern:
 
-### Step 1: PubMed Search (execute via Bash)
+### Step 1: Search REQUIRED databases from domain profile
 ```bash
-python3 skills/pubmed.py "intermittent fasting longevity lifespan human"
+# Use the databases marked REQUIRED in your domain profile, e.g.:
+python3 skills/search_all.py "your research query" --domain {domain}
 ```
 
-Output will show PMIDs, titles, authors, abstracts, DOIs.
-
-### Step 2: OpenAlex Search (execute via Bash)
+### Step 2: Search RECOMMENDED databases for broader coverage
 ```bash
-python3 skills/openalex.py "intermittent fasting systematic review meta-analysis"
+# Use individual skills for targeted searches
+python3 skills/{database}.py "more specific query"
 ```
 
-Output will show citation counts and open access status.
-
-### Step 3: Semantic Scholar Search (execute via Bash)
+### Step 3: Counter-evidence search
 ```bash
-python3 skills/semantic_scholar.py "intermittent fasting longevity"
+# Search for evidence against hypotheses
+python3 skills/search_all.py "topic (failure OR criticism OR limitation)" --domain {domain}
 ```
 
-Output will show citation-rich results across disciplines.
-
-### Step 4: bioRxiv Search (execute via Bash)
-```bash
-python3 skills/biorxiv.py "intermittent fasting aging"
-```
-
-Output will show recent preprints not yet in PubMed.
-
-### Step 5: Unified Search (for broader coverage)
-```bash
-python3 skills/search_all.py "intermittent fasting longevity" --sources all
-```
-
-Searches all databases at once and deduplicates results.
-
-### Step 6: WebSearch (supplementary)
-Only AFTER running the above scripts, use WebSearch for grey literature, news, and policy documents.
+### Step 4: WebSearch (supplementary)
+Only AFTER running database searches, use WebSearch for grey literature, news, and non-academic sources.
 
 ### Recording Results
-For each source found, extract: citation, PMID/DOI, study type, key finding, limitations, quality assessment. Add to the Evidence Collected table in journal.md.
-
-**Gap identified**: No systematic review or meta-analysis specifically on IF and human longevity/mortality outcomes.
+For each source found, extract: citation, DOI/identifier, study type, key finding, limitations, quality assessment (using domain profile rubric). Add to the Evidence Collected table in evidence.md.

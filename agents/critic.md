@@ -159,7 +159,7 @@ For each surfaced assumption:
 > **Framework Applied: Evidence Quality Audit**
 > **What this does:** Not all evidence is created equal. Ranking evidence by methodology prevents weak studies from carrying the same weight as strong ones. The hierarchy below reflects how much confidence each study type warrants — higher-level evidence controls for more sources of bias.
 
-**Evidence Hierarchy:** `SR/MA > RCT > Cohort > Case-Control > Case Series > Expert Opinion`
+**Evidence Hierarchy:** Use the evidence hierarchy from the domain profile provided in your context.
 
 | Claim | Best Evidence Available | Evidence Level | Sufficient? |
 |-------|------------------------|----------------|-------------|

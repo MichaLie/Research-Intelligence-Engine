@@ -224,6 +224,8 @@ When you read `journal.md`, focus on:
 
 ## Example Checkpoint Snippet
 
+> **Note:** The example below is from a biomedical research session. Adapt the language, evidence types, and confidence framing to match the session's research domain (see domain profile).
+
 ```markdown
 ## Key Findings
 

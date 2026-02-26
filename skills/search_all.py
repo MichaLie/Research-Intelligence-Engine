@@ -19,13 +19,20 @@ from typing import Optional
 
 # Add parent directory to path for config import
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-from config import DEFAULT_MAX_RESULTS
+from config import DEFAULT_MAX_RESULTS, DOMAIN_DEFAULT_SOURCES
 
 # All available sources
 ALL_SOURCES = ["pubmed", "openalex", "semantic_scholar", "arxiv", "crossref", "dblp", "biorxiv"]
 
-# Default sources (balanced coverage without excessive API calls)
-DEFAULT_SOURCES = ["pubmed", "openalex", "semantic_scholar"]
+# Default sources (fallback when no domain specified)
+DEFAULT_SOURCES = ["openalex", "semantic_scholar", "crossref"]
+
+
+def _get_default_sources(domain: str | None = None) -> list[str]:
+    """Get default sources for a domain. Falls back to DEFAULT_SOURCES."""
+    if domain and domain in DOMAIN_DEFAULT_SOURCES:
+        return list(DOMAIN_DEFAULT_SOURCES[domain])
+    return list(DEFAULT_SOURCES)
 
 # Minimal stop words for relevance scoring
 _STOP_WORDS = {
@@ -293,6 +300,7 @@ def search_all(
     query: str,
     max_results: int = DEFAULT_MAX_RESULTS,
     sources: Optional[list[str]] = None,
+    domain: Optional[str] = None,
     year_from: Optional[int] = None,
     year_to: Optional[int] = None,
 ) -> dict:
@@ -302,7 +310,9 @@ def search_all(
     Args:
         query: Search query string
         max_results: Maximum total results to return
-        sources: List of sources to search (default: pubmed, openalex, semantic_scholar)
+        sources: List of sources to search (overrides domain defaults if set)
+        domain: Research domain for automatic source selection
+                (biomedical, computer_science, physics_math, social_sciences, general)
         year_from: Filter by publication year (start)
         year_to: Filter by publication year (end)
 
@@ -312,7 +322,7 @@ def search_all(
         - stats: Search statistics per source
     """
     if sources is None:
-        sources = list(DEFAULT_SOURCES)
+        sources = _get_default_sources(domain)
 
     all_papers = []
     stats = {"per_source": {}, "total_before_dedup": 0}
@@ -447,24 +457,37 @@ if __name__ == "__main__":
         default=DEFAULT_MAX_RESULTS,
         help=f"Maximum number of results (default: {DEFAULT_MAX_RESULTS})"
     )
+    parser.add_argument(
+        "--domain",
+        default=None,
+        choices=list(DOMAIN_DEFAULT_SOURCES.keys()),
+        help=f"Research domain for default source selection. Overridden by --sources. Available: {', '.join(DOMAIN_DEFAULT_SOURCES.keys())}"
+    )
     parser.add_argument("--year-from", type=int, help="Filter by publication year (start)")
     parser.add_argument("--year-to", type=int, help="Filter by publication year (end)")
     parser.add_argument("--json", action="store_true", help="Output results as JSON")
 
     args = parser.parse_args()
 
-    # Parse sources
+    # Parse sources: explicit --sources overrides --domain
+    sources_explicitly_set = args.sources != ",".join(DEFAULT_SOURCES)
     if args.sources.lower() == "all":
         sources = list(ALL_SOURCES)
-    else:
+    elif sources_explicitly_set:
         sources = [s.strip() for s in args.sources.split(",")]
+    elif args.domain:
+        sources = _get_default_sources(args.domain)
+    else:
+        sources = list(DEFAULT_SOURCES)
 
-    print(f"Searching {', '.join(sources)} for: {args.query}\n")
+    domain_info = f" [domain: {args.domain}]" if args.domain else ""
+    print(f"Searching {', '.join(sources)} for: {args.query}{domain_info}\n")
 
     result = search_all(
         query=args.query,
         max_results=args.max_results,
         sources=sources,
+        domain=args.domain,
         year_from=args.year_from,
         year_to=args.year_to,
     )
