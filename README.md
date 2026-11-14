@@ -1,6 +1,11 @@
 # Research Intelligence Engine
 
-Instructions and small scripts that turn an AI coding agent into a sparring partner for a literature question. You put your own view on record first; four specialist roles then expand it, search for and against it, attack it and check your argument, and you write the conclusion.
+**Your judgment first, then the agents.**  
+[Concept page](https://michalie.github.io/Research-Intelligence-Engine/) · [Getting started](SETUP.md) · [Agent Risk Atlas](https://michalie.github.io/agent-risk-atlas/)
+
+AI agents can now search, read and summarise the literature in minutes. The risk is that the agent frames the question, picks the evidence and writes the conclusion, and your own judgment gets less use. The [Agent Risk Atlas](https://michalie.github.io/agent-risk-atlas/) maps 47 ways research with AI agents goes wrong, among them deferring to the agent's framing, reading abstracts only, and fluent reports that outrun their evidence.
+
+This engine reverses the order. You put your own view on record first. Four specialist roles then expand it, search for and against it, attack it and check your argument, and you write the conclusion. It is a set of instructions and small scripts that run inside an AI coding agent.
 
 It is for PhD students and for researchers at any stage. The result is addressed to your second reader, whoever checks your work: a supervisor, a senior researcher, a team expert or a co-author.
 
@@ -41,8 +46,7 @@ The engine collects nothing. What you type and the papers you open go to your AI
 
 ## More
 
-- Concept page: <https://michalie.github.io/Research-Intelligence-Engine/>
-- The engine is a companion to the [Agent Risk Atlas](https://michalie.github.io/agent-risk-atlas/) (47 risks of research with AI agents, 25 defences). The concept page names the risk each step guards against.
+- The concept page names the atlas risk each step guards against.
 - Version 1 (February 2026) is kept under the git tag v1.0.
 
 ## Questions and problems
