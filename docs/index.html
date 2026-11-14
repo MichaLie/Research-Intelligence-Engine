@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Research Intelligence Engine</title>
+<meta name="description" content="Work a literature question with AI agents and keep your own judgment in charge: you think first, agents push back, you write the conclusion.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@500;700&family=IBM+Plex+Sans:wght@400;500&family=IBM+Plex+Mono:wght@400&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#fbfaf6; --surface:#ffffff; --ink:#1c2422; --muted:#5d6865; --line:#e2ddd2;
+  --teal:#0f6e56; --teal-soft:#e1f5ee; --gold:#a8730f; --gold-soft:#faeeda;
+  --violet:#534ab7; --violet-soft:#eeedfe; --grey-soft:#f1efe8; --red:#a32d2d;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#141a19; --surface:#1c2422; --ink:#ebe8e1; --muted:#a3ada9; --line:#2f3936;
+    --teal:#5dcaa5; --teal-soft:#0e2f27; --gold:#ef9f27; --gold-soft:#33260c;
+    --violet:#afa9ec; --violet-soft:#26215c; --grey-soft:#262c2a; --red:#f09595;
+  }
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.65 "IBM Plex Sans",system-ui,sans-serif}
+main{max-width:920px;margin:0 auto;padding:0 16px 64px}
+h1,h2,h3{font-family:"Schibsted Grotesk",system-ui,sans-serif;line-height:1.2;margin:0}
+h1{font-size:clamp(34px,6vw,52px);font-weight:700;letter-spacing:-.01em}
+h2{font-size:26px;font-weight:700;margin:56px 0 14px}
+h3{font-size:18px;font-weight:500}
+p{margin:0 0 12px}
+a{color:var(--teal)}
+code,.mono{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:.88em}
+.hero{padding:56px 0 28px;border-bottom:1px solid var(--line)}
+.kicker{font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:var(--gold);font-weight:500;margin-bottom:12px}
+.lede{font-size:20px;max-width:46em;margin-top:16px}
+.motto{display:flex;flex-wrap:wrap;gap:10px;margin-top:22px}
+.motto span{border:1px solid var(--line);border-radius:999px;padding:6px 14px;background:var(--surface);font-size:15px}
+.motto b{color:var(--teal);font-weight:500}
+.grid{display:grid;gap:14px}
+.g4{grid-template-columns:repeat(auto-fit,minmax(190px,1fr))}
+.g3{grid-template-columns:repeat(auto-fit,minmax(240px,1fr))}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:16px 18px}
+.move .tag{font-size:12px;letter-spacing:.05em;text-transform:uppercase;color:var(--violet);font-weight:500}
+.move .you{margin-top:10px;padding:8px 10px;border-radius:8px;background:var(--teal-soft);font-size:14px}
+.move .agent{margin-top:8px;padding:8px 10px;border-radius:8px;background:var(--violet-soft);font-size:14px}
+.step{display:grid;grid-template-columns:42px 1fr;gap:14px;padding:16px 0;border-top:1px solid var(--line)}
+.step:first-child{border-top:0}
+.num{width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:"Schibsted Grotesk",sans-serif;font-weight:700;background:var(--grey-soft)}
+.who{display:inline-flex;gap:6px;align-items:center;font-size:12px;color:var(--muted);margin-right:10px}
+.dot{width:9px;height:9px;border-radius:50%;display:inline-block}
+.d-you{background:var(--teal)} .d-agent{background:var(--violet)} .d-script{background:#888780}
+.meta{font-size:13px;color:var(--muted);margin-top:6px}
+.meta b{color:var(--ink);font-weight:500}
+table{width:100%;border-collapse:collapse;font-size:15px;background:var(--surface);border:1px solid var(--line);border-radius:12px;overflow:hidden}
+th,td{text-align:left;padding:10px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-weight:500;background:var(--grey-soft)}
+tr:last-child td{border-bottom:0}
+.tablewrap{overflow-x:auto}
+.note{border-left:3px solid var(--gold);background:var(--gold-soft);padding:12px 16px;border-radius:0;margin:16px 0}
+.small{font-size:14px;color:var(--muted)}
+ol.start{padding-left:20px} ol.start li{margin-bottom:8px}
+footer{margin-top:64px;padding-top:20px;border-top:1px solid var(--line);font-size:14px;color:var(--muted)}
+nav.toc{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:14px;margin-top:22px}
+</style>
+</head>
+<body>
+<main>
+
+<header class="hero">
+  <div class="kicker">Research Intelligence Engine · version 2</div>
+  <h1>Your judgment first, then the agents</h1>
+  <p class="lede">Bring a real literature question and put your own view on record. Four AI roles then expand it, search for and against it, attack it and check your argument. At the end you have your own argument, checked, and a handoff for the person who reviews your work.</p>
+  <div class="motto"><span><b>You</b> think first</span><span><b>Agents</b> push back</span><span><b>You</b> write the conclusion</span></div>
+  <nav class="toc" aria-label="On this page"><a href="#for">Who it is for</a><a href="#why">Why</a><a href="#moves">The four moves</a><a href="#session">One session</a><a href="#structure">Why it holds</a><a href="#tested">How it was tested</a><a href="#start">Start</a><a href="#v1">From v1 to v2</a></nav>
+</header>
+
+<section id="for">
+  <h2>Who it is for</h2>
+  <div class="grid g3">
+    <div class="card"><h3>PhD students</h3><p>Use it on a question from your thesis. You frame the question and say what would change your mind before any agent does. A private log follows your predictions and choices across sessions, and the handoff goes to your second reader (often your supervisor).</p></div>
+    <div class="card"><h3>Researchers</h3><p>Use it before a paper, a grant or a team decision leans on the literature. The handoff lists the sources each claim cites, what was left open and how AI was used, ready to edit for a methods section. Your second reader can be a team expert, a senior researcher or a co-author.</p></div>
+  </div>
+</section>
+
+<section id="why">
+  <h2>Why your view comes first</h2>
+  <p>AI agents can now search, read and summarise the literature quickly. The risk is that the agent frames the question, picks the evidence and writes the conclusion, and the researcher's own judgment gets less use. The <a href="https://michalie.github.io/agent-risk-atlas/">Agent Risk Atlas</a> maps these failures, among them deference to the agent's framing, reading abstracts only, and fluent reports that outrun their evidence.</p>
+  <p>This engine reverses the order. You make each move first, an agent makes it after you, and you see where the two differ. If you need a finished literature review, use another tool, and read the atlas first.</p>
+</section>
+
+<section id="moves">
+  <h2>The four moves</h2>
+  <div class="grid g4">
+    <div class="card move"><div class="tag">Expand</div><h3>Deep Analyst</h3><div class="you">You: your hypotheses, and what would change your mind</div><div class="agent">Agent: angles, levels of explanation and competing hypotheses your brief did not use</div></div>
+    <div class="card move"><div class="tag">Find</div><h3>Two Librarians</h3><div class="you">You: the papers you would read first</div><div class="agent">Agents: one searches for, one against; full texts, quotes, and whether your methods are out of date</div></div>
+    <div class="card move"><div class="tag">Attack</div><h3>Critic</h3><div class="you">You: the weakest point of your own case</div><div class="agent">Agent: claims audit, weak evidence, the strongest alternative, three questions</div></div>
+    <div class="card move"><div class="tag">Verify</div><h3>Fresh eyes</h3><div class="you">You: your argument, in your words</div><div class="agent">Agent: a verdict on every claim, checked against the evidence; it never suggests wording</div></div>
+  </div>
+  <p class="small" style="margin-top:12px">A separate agent, the colleague, runs the session and keeps the record. It does no analysis. Scripts do the bookkeeping.</p>
+</section>
+
+<section id="session">
+  <h2>One session, step by step</h2>
+  <p class="small" style="margin:0 0 10px"><span class="who"><span class="dot d-you"></span>You</span><span class="who"><span class="dot d-agent"></span>Agent</span><span class="who"><span class="dot d-script"></span>Script</span></p>
+  <div class="card">
+    <div class="step"><div class="num">1</div><div><span class="who"><span class="dot d-agent"></span>Colleague</span><h3>Start</h3><p>The colleague explains the session and what leaves your machine. Your question, your hypotheses and everything else you type go to your AI provider like any chat, as do the papers opened, so check your plan's data settings and your institution's AI policy. Searches and reference checks go to PubMed, Europe PMC, OpenAlex, Crossref, DataCite and doi.org, and the Librarians may open open-access papers on publishers' sites. The engine collects nothing. Don't paste unpublished data, or anything your institution does not allow in a cloud AI tool.</p></div></div>
+    <div class="step"><div class="num">2</div><div><span class="who"><span class="dot d-you"></span>You</span><span class="who"><span class="dot d-script"></span>Script</span><h3>Your brief, sealed</h3><p>Six short questions: your question; what you expect and how sure you are; your hypotheses and what would change your mind; the papers you know; what the answer is for; your methods. The colleague may ask up to three clarifying questions but suggests no hypotheses, papers or answers. A script seals the brief with a time and a fingerprint, so you can later compare your first thinking with where you ended up.</p><div class="meta"><b>Guards against:</b> deference to the agent's framing</div></div></div>
+    <div class="step"><div class="num">3</div><div><span class="who"><span class="dot d-script"></span>Script</span><h3>Your own papers, checked</h3><p>Every paper on your list is looked up at PubMed and Crossref, with DataCite and doi.org as fallbacks. Does it exist, is it the paper you think, has it been retracted?</p><div class="meta"><b>Guards against:</b> wrong and retracted references</div></div></div>
+    <div class="step"><div class="num">4</div><div><span class="who"><span class="dot d-agent"></span>Agent</span><span class="who"><span class="dot d-you"></span>You</span><h3>Expand</h3><p>After the seal, the Deep Analyst adds what your brief did not use. You decide what to adopt and say why.</p></div></div>
+    <div class="step"><div class="num">5</div><div><span class="who"><span class="dot d-agent"></span>Agents</span><span class="who"><span class="dot d-script"></span>Script</span><span class="who"><span class="dot d-you"></span>You</span><h3>Find</h3><p>Two Librarians search, one for your main hypothesis and one against it, without seeing each other's work. Searches use PubMed and Europe PMC (life sciences) and OpenAlex (all fields). The Librarians read open full texts, quote with locations, check whether the methods you named are out of date, and pick one passage for you to read yourself. Scripts check every identifier they cite and look up each quote in the saved full text.</p><div class="meta"><b>Guards against:</b> abstracts-only reading, one-sided searches, outdated methods</div></div></div>
+    <div class="step"><div class="num">6</div><div><span class="who"><span class="dot d-you"></span>You</span><span class="who"><span class="dot d-agent"></span>Agent</span><h3>Attack</h3><p>You name the weakest point of your case first, and no agent sees that note. Then you read the Critic's report on what the evidence carries and where it falls short.</p></div></div>
+    <div class="step"><div class="num">7</div><div><span class="who"><span class="dot d-you"></span>You</span><span class="who"><span class="dot d-script"></span>Script</span><h3>Checkpoint</h3><p>Five options in a fixed order (continue, deep dive, converge, redirect, stop), each with what it buys and what it risks, and no recommendation. You choose and give one reason; only then does the colleague say what it would have chosen. Before you converge, a script lists the open threads (unchecked premises, outdated methods, flagged references, unconfirmed quotes) and you settle each one.</p><div class="meta"><b>Guards against:</b> following the agent's lean, findings that never reach you</div></div></div>
+    <div class="step"><div class="num">8</div><div><span class="who"><span class="dot d-you"></span>You</span><span class="who"><span class="dot d-agent"></span>Agent</span><h3>Your argument, then Fresh eyes</h3><p>You write the answer in your own words, each claim tagged with its evidence. Fresh eyes marks every claim verified, unverified or contradicted, and says where. It never suggests wording; you revise.</p><div class="meta"><b>Guards against:</b> reports that outrun their evidence, fluency mistaken for truth</div></div></div>
+    <div class="step"><div class="num">9</div><div><span class="who"><span class="dot d-you"></span>You</span><span class="who"><span class="dot d-agent"></span>Agent</span><span class="who"><span class="dot d-script"></span>Script</span><h3>Close</h3><p>You write two questions for your second reader, then compare your argument with the agents' own answer, checked the same way. A script writes the handoff and adds an entry to your private learning log.</p></div></div>
+  </div>
+  <p class="small" style="margin-top:10px">After every step a script rebuilds a dashboard from the session files. Its "Needs a look" panel shows what went wrong, such as agent output dated before your seal or a retracted source still cited.</p>
+</section>
+
+<section id="structure">
+  <h2>Why it holds</h2>
+  <p>The rules for the agents live in one instruction file, and an agent can ignore instructions. So the parts that matter most are built so that a lapse shows up on the dashboard.</p>
+  <div class="grid g3">
+    <div class="card"><h3>Order</h3><p>Your brief is sealed before any agent output exists. The dashboard checks the times.</p></div>
+    <div class="card"><h3>Separation by files</h3><p>Each agent reads only the files listed for it. What should not influence it (the colleague's views, your private notes, the other Librarian's papers) sits in files it is not given.</p></div>
+    <div class="card"><h3>Scripts for what can be checked</h3><p>References, retractions, quotes, seals, cut-off outputs and counts are checked by scripts, the same way every time.</p></div>
+  </div>
+  <div class="note">In testing, two script-checked safeguards did what they were built for: the brief was sealed before any agent output in all nine sessions, and once a script checked each agent's report for missing sections, no cut-off report went unnoticed. Safeguards that were only instructions, such as "never suggest wording", reduced their failures without removing them: agent wording still reached the researcher's argument one to four times per session in the last two rounds. The atlas names this risk: <em>a rule is not proof</em>.</div>
+</section>
+
+<section id="tested">
+  <h2>How it was tested</h2>
+  <p>The engine was tested with simulated PhD students: three personas (rushed, confident, new to the field) each ran one session per round, nine in all. In one round-1 session the agents' own answer was cut off, so the final comparison could not be made. Each question carried five real, planted problems: a retracted paper, a wrong DOI, a finding noted for the wrong species, an outdated method or reference version, and a claim the evidence does not carry. Blind scorers worked from the session files, the engine's own rules and a sealed answer key, and never saw the developer's reasoning. The engine was revised after rounds 1 and 2. Round 3 used a question from another field, written by a separate agent; the developer did not read it before round 3 was scored. The changes made after round 3 were not tested on this question, so its score is reported as it was measured.</p>
+  <div class="tablewrap"><table>
+    <tr><th>Round</th><th>Question</th><th>Planted problems caught</th></tr>
+    <tr><td>1</td><td>Sperm RNA, seminal extracellular vesicles and paternal diet</td><td>14 fully, 1 partly</td></tr>
+    <tr><td>2</td><td>Same question, engine revised</td><td>14 fully, 1 missed</td></tr>
+    <tr><td>3 (final test, new question)</td><td>Comparative genomics, written by a separate agent</td><td>11 fully, 3 partly, 1 missed</td></tr>
+  </table></div>
+  <p style="margin-top:14px">A retracted paper was caught in all nine sessions; in rounds 1 and 2 its retraction notice was less than three weeks old, and a script found it in PubMed. The weak point in round 3 was findings that stayed in a file and never reached the student, such as an agent's note that a genome assembly was out of date. A script now lists every open thread at each checkpoint. After round 3 the engine changed again (open threads, a quote check, fixes to the reference check). These changes have been tested by running the scripts on trial data; they have not been re-run with simulated students.</p>
+  <div class="note"><b>What this does not show.</b> Simulated students show that the engine works and where it breaks. They cannot show that it helps anyone think better, and no real user has tried it yet. All agents ran on one model, in Claude Code. By their file times the simulated sessions took from about 70 minutes to just under two hours; how long a person needs is not yet known. The full scoring record is kept by the author and is available on request, through an issue on the repository page.</div>
+</section>
+
+<section id="start">
+  <h2>Start</h2>
+  <ol class="start">
+    <li><b>Get the files.</b> On the <a href="https://github.com/MichaLie/Research-Intelligence-Engine">repository page</a>, click <b>Code</b>, then <b>Download ZIP</b>, and unzip it somewhere you will find again. With git: <code>git clone https://github.com/MichaLie/Research-Intelligence-Engine</code>.</li>
+    <li><b>Open the folder in an agent.</b> New to coding agents? Follow <a href="https://github.com/MichaLie/Research-Intelligence-Engine/blob/main/SETUP.md"><code>SETUP.md</code></a>. It uses the Code tab of the Claude desktop app, which needs a paid Claude plan (Pro or above). You also need Python 3.9 or newer. If you already use Claude Code in a terminal, open the folder there. Other coding agents that read <code>AGENTS.md</code> may work; none has been tried.</li>
+    <li><b>Type the first message:</b> <code>Hi, I'd like to start a new investigation.</code></li>
+    <li><b>What happens next.</b> The colleague explains the session, asks who will check your work (optional) and then asks the six questions of your brief. Answer in the chat, in your own language if you like. Each message that needs you ends with a line starting <b>Your turn:</b>. Plan one to two hours for a session.</li>
+  </ol>
+  <p class="small">No API keys or second AI provider are needed. If you also use a coding agent from a second provider, running Fresh eyes there is the most useful upgrade, since otherwise one model plays every role. This route has not been tried.</p>
+</section>
+
+<section id="v1">
+  <h2>From v1 to v2</h2>
+  <p>Version 1 (February 2026) had five agents that reframed the question, searched abstracts, critiqued, synthesised and wrote a polished report. It already asked students to give a reason for each choice, and that idea carries over. In version 2 you write first and the agents check. Open full texts replace abstracts, every reference is checked, and the end product is your own argument.</p>
+  <p class="small" style="margin-top:10px">Version 1 is kept under the git tag v1.0.</p>
+</section>
+
+<footer>
+  <p>Research Intelligence Engine, by Michaela Liegertová. Companion to the <a href="https://michalie.github.io/agent-risk-atlas/">Agent Risk Atlas</a>. Built with AI agents (Claude, by Anthropic).</p>
+  <p>Code under the MIT licence, text under CC BY 4.0. Questions and problems: <a href="https://github.com/MichaLie/Research-Intelligence-Engine/issues">open an issue</a>.</p>
+</footer>
+</main>
+</body>
+</html>

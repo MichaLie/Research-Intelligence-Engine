@@ -1,0 +1,19 @@
+cff-version: 1.2.0
+message: "If you use the Research Intelligence Engine, please cite it as below."
+title: "Research Intelligence Engine"
+version: "2.0"
+date-released: 2026-11-14
+authors:
+  - family-names: "Liegertová"
+    given-names: "Michaela"
+license:
+  - MIT
+  - CC-BY-4.0
+url: "https://michalie.github.io/Research-Intelligence-Engine/"
+repository-code: "https://github.com/MichaLie/Research-Intelligence-Engine"
+abstract: "Instructions and small scripts that turn an AI coding agent into a sparring partner for a literature question: the researcher puts their own view on record first, four specialist roles then expand it, search for and against it, attack it and check the argument, and the researcher writes the conclusion."
+keywords:
+  - AI agents
+  - literature review
+  - research judgment
+  - research integrity

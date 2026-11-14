@@ -1,0 +1,21 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-settings.json",
+  "permissions": {
+    "allow": [
+      "Bash(python3 --version)",
+      "Bash(python --version)",
+      "Bash(py -3 --version)",
+      "PowerShell(python3 --version)",
+      "PowerShell(python --version)",
+      "PowerShell(py -3 --version)",
+      "Bash(python3 scripts/*)",
+      "Bash(python scripts/*)",
+      "Bash(py -3 scripts/*)",
+      "PowerShell(python3 scripts/*)",
+      "PowerShell(python scripts/*)",
+      "PowerShell(py -3 scripts/*)",
+      "Edit(/sessions/**)",
+      "Edit(/learning/**)"
+    ]
+  }
+}
